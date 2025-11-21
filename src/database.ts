@@ -11,7 +11,10 @@ db.serialize(() => {
         saldo FLOAT
     )`);
 
-  db.run(`INSERT INTO clientes(nome, email, saldo) VALUES(?, ?, 0)`, ['TESTE', 'TESTE@TESTE.com.br']);
+  db.run(`INSERT INTO clientes(nome, email, saldo) VALUES(?, ?, 0)`, [
+    'TESTE',
+    'TESTE@TESTE.com.br',
+  ]);
 });
 
 export default db;
