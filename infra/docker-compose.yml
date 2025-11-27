@@ -1,23 +1,31 @@
-version: '3.8'
+﻿version: '3.8'
 
 services:
-  localstack:
-    image: localstack/localstack:latest
-    container_name: localstack
+
+  db:
+    image: postgres:15-alpine
+    container_name: case-itau-db
     ports:
-      - "4566:4566" # edge port
-      - "4571:4571"
+      - "5432:5432"
     environment:
-      - SERVICES=${LOCALSTACK_SERVICES:-s3,dynamodb,sqs}
-      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-test}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-test}
-      - DATA_DIR=/tmp/localstack/data
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=testdb
     volumes:
-      - ./localstack-data:/tmp/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:4566/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - "./schema.sql:/docker-entrypoint-initdb.d/init.sql"
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: case-itau-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+      - DB_DATABASE=testdb
+    depends_on:
+      - db

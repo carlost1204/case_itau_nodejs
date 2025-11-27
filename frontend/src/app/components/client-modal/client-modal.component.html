@@ -1,0 +1,31 @@
+<div class="modal-backdrop fade show" *ngIf="isVisible"></div>
+<div class="modal fade show d-block" tabindex="-1" *ngIf="isVisible">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ client ? 'Edit Client' : 'New Client' }}</h5>
+        <button type="button" class="btn-close" (click)="onCancel()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="nome" class="form-label">Name</label>
+            <input type="text" class="form-control" id="nome" [(ngModel)]="formData.nome" name="nome" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="formData.email" name="email" required>
+          </div>
+          <div class="mb-3" *ngIf="!client">
+            <label for="saldo" class="form-label">Initial Balance</label>
+            <input type="number" class="form-control" id="saldo" [(ngModel)]="formData.saldo" name="saldo" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

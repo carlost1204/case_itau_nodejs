@@ -1,0 +1,6 @@
+# Enforce LF for text files
+* text=auto eol=lf
+
+# Node modules and build artifacts
+/node_modules/* -export-ignore
+/dist/* -export-ignore
